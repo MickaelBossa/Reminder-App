@@ -15,7 +15,7 @@ import 'moment/locale/fr';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/Colors';
 
-export default function Home() {
+export default function Home(props) {
   // Variables
   const date = moment().format('LL');
 
@@ -42,7 +42,7 @@ export default function Home() {
           Commencez par créer votre premier projet pour ajouter votre première
           note ensuite
         </Text>
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => props.navigation.navigate('TabProjects')} >
           <LinearGradient colors={['#a996f2', '#8f79fc']} style={styles.addBtn}>
             <Text style={styles.addBtnText}>Voir mes projets</Text>
           </LinearGradient>

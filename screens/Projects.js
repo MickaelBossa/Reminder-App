@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function Projects() {
+export default function Projects(props) {
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1 }}>
@@ -23,7 +23,7 @@ export default function Projects() {
             style={styles.illustration}
           />
           <Text>Commencez par créer votre premier projet</Text>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity activeOpacity={0.8} onPress={() => props.navigation.navigate('AddProject')} >
             <LinearGradient
               colors={['#a996f2', '#8f79fc']}
               style={styles.addBtn}
