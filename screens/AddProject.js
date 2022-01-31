@@ -12,6 +12,8 @@ import {
 import Colors from '../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import * as appActions from '../store/actions/app';
 
 export default function AddProject(props) {
   // Variables
@@ -20,7 +22,17 @@ export default function AddProject(props) {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const dispatch = useDispatch();
+
+  // Fonctions
+  const onSubmit = (data) => {
+    const project = {
+      name: data.name,
+    };
+
+    dispatch(appActions.addProject(project));
+    props.navigation.goBack();
+  };
 
   return (
     <View style={styles.container}>
@@ -43,7 +55,11 @@ export default function AddProject(props) {
             )}
           />
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={styles.submit} onPress={() => props.navigation.navigate('AddNote')}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={styles.submit}
+          onPress={handleSubmit(onSubmit)}
+        >
           <Text style={styles.submitText}>Créer</Text>
           <Ionicons name='arrow-forward' size={23} color={'white'} />
         </TouchableOpacity>

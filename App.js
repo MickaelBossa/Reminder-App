@@ -1,15 +1,25 @@
 // Librairies
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+// Redux
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import appReducer from './store/reducers/app';
+import thunk from 'redux-thunk';
 
 // Composants
 import AppNavigator from './navigation/AppNavigator';
 
+const store = createStore(appReducer, applyMiddleware(thunk));
+
 export default function App() {
   return (
     <View style={styles.container}>
-      <AppNavigator />
-      <StatusBar style="auto" />
+      <Provider store={store}>
+        <AppNavigator />
+      </Provider>
+      <StatusBar style='auto' />
     </View>
   );
 }

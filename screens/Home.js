@@ -15,9 +15,14 @@ import 'moment/locale/fr';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/Colors';
 
+// Redux
+import { useSelector } from 'react-redux';
+
 export default function Home(props) {
   // Variables
   const date = moment().format('LL');
+  const notes = useSelector((state) => state.notes);
+  const projects = useSelector((state) => state.projects);
 
   return (
     <View style={styles.container}>
@@ -25,12 +30,12 @@ export default function Home(props) {
         <Text style={styles.date}>{date}</Text>
         <View style={styles.cards}>
           <LinearGradient colors={['#ed89af', '#f45384']} style={styles.card}>
-            <Text style={styles.cardNumber}>0</Text>
+            <Text style={styles.cardNumber}>{notes.length}</Text>
             <Text style={styles.cardText}>Notes</Text>
           </LinearGradient>
 
           <LinearGradient colors={['#fed3a0', '#ffa63e']} style={styles.card}>
-            <Text style={styles.cardNumber}>0</Text>
+            <Text style={styles.cardNumber}>{projects.length}</Text>
             <Text style={styles.cardText}>Projets</Text>
           </LinearGradient>
         </View>
@@ -42,7 +47,10 @@ export default function Home(props) {
           Commencez par créer votre premier projet pour ajouter votre première
           note ensuite
         </Text>
-        <TouchableOpacity activeOpacity={0.8} onPress={() => props.navigation.navigate('TabProjects')} >
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => props.navigation.navigate('TabProjects')}
+        >
           <LinearGradient colors={['#a996f2', '#8f79fc']} style={styles.addBtn}>
             <Text style={styles.addBtnText}>Voir mes projets</Text>
           </LinearGradient>
