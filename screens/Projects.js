@@ -60,7 +60,9 @@ export default function Projects(props) {
             renderItem={({ item }) => (
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => props.navigation.navigate('Project')}
+                onPress={() =>
+                  props.navigation.navigate('Project', { item: item })
+                }
               >
                 <View style={styles.project}>
                   <Text style={styles.projectText}>{item.name}</Text>
