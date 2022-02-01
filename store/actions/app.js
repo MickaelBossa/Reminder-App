@@ -5,6 +5,10 @@ export const ADD_PROJECT = 'ADD_PROJECT';
 export const ADD_NOTE = 'ADD_NOTE';
 export const GET_NOTES = 'GET_NOTES';
 export const GET_PROJECTS = 'GET_PROJECTS';
+export const DELETE_NOTE = 'DELETE_NOTE';
+export const DELETE_PROJECT = 'DELETE_PROJECT';
+export const START_GET_NOTES = 'START_GET_NOTES';
+export const END_GET_NOTES = 'END_GET_NOTES';
 
 export const addProject = (project) => {
   return (dispatch) => {
@@ -44,6 +48,7 @@ export const addNote = (note) => {
 
 export const getNotes = () => {
   return (dispatch) => {
+    dispatch({ type: START_GET_NOTES });
     axios
       .get('/notes.json')
       .then((response) => {
@@ -57,9 +62,11 @@ export const getNotes = () => {
           });
         }
         dispatch({ type: GET_NOTES, notes: fetchedNotes });
+        dispatch({ type: END_GET_NOTES });
       })
       .catch((error) => {
         console.log(error);
+        dispatch({ type: END_GET_NOTES });
       });
   };
 };
@@ -81,5 +88,21 @@ export const getProjects = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+};
+
+export const deleteNote = (noteId) => {
+  return (dispatch) => {
+    axios.delete(`/notes/${noteId}.json`).then((response) => {
+      dispatch({ type: DELETE_NOTE, noteId: noteId });
+    });
+  };
+};
+
+export const deleteProject = (projectId) => {
+  return (dispatch) => {
+    axios.delete(`/projects/${projectId}.json`).then((response) => {
+      dispatch({ type: DELETE_PROJECT, projectId: projectId });
+    });
   };
 };

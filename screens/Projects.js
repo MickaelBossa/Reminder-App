@@ -14,10 +14,22 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import Colors from '../constants/Colors';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useDispatch } from 'react-redux';
+import * as appActions from '../store/actions/app';
 
 export default function Projects(props) {
   // Variables
   const projects = useSelector((state) => state.projects);
+  const notes = useSelector((state) => state.notes);
+  const dispatch = useDispatch();
+
+  // Fonctions
+  const onDeleteHandler = (projectId) => {
+    const notesForProject = notes.filter((note) => note.projectId == projectId);
+    notesForProject.forEach((note) => dispatch(appActions.deleteNote(note.id)));
+    dispatch(appActions.deleteProject(projectId));
+  };
 
   return (
     <View style={styles.container}>
@@ -66,6 +78,17 @@ export default function Projects(props) {
               >
                 <View style={styles.project}>
                   <Text style={styles.projectText}>{item.name}</Text>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => onDeleteHandler(item.id)}
+                  >
+                    <Ionicons
+                      style={styles.closeIcon}
+                      name='close'
+                      size={16}
+                      color='#fff'
+                    />
+                  </TouchableOpacity>
                 </View>
               </TouchableOpacity>
             )}
@@ -120,6 +143,8 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 15,
     borderRadius: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   projectText: {
     fontSize: 17,
@@ -134,5 +159,13 @@ const styles = StyleSheet.create({
   },
   smallAddButtonText: {
     color: '#fff',
+  },
+  closeIcon: {
+    backgroundColor: 'crimson',
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
 });

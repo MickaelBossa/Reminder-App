@@ -10,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -29,12 +30,21 @@ export default function Home(props) {
   const notes = useSelector((state) => state.notes);
   const projects = useSelector((state) => state.projects);
   const dispatch = useDispatch();
+  const loadedNotes = useSelector((state) => state.loadedNotes);
 
   // Cycle de vie
   useEffect(() => {
     dispatch(appActions.getNotes());
     dispatch(appActions.getProjects());
   }, []);
+
+  if (loadedNotes) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size='large' color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
