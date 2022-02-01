@@ -1,5 +1,5 @@
 // Librairies
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Platform,
   Image,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/fr';
@@ -16,13 +17,24 @@ import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../constants/Colors';
 
 // Redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as appActions from '../store/actions/app';
+
+// Composants
+import Note from '../components/Note/Note';
 
 export default function Home(props) {
   // Variables
   const date = moment().format('LL');
   const notes = useSelector((state) => state.notes);
   const projects = useSelector((state) => state.projects);
+  const dispatch = useDispatch();
+
+  // Cycle de vie
+  useEffect(() => {
+    dispatch(appActions.getNotes());
+    dispatch(appActions.getProjects());
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -40,21 +52,36 @@ export default function Home(props) {
           </LinearGradient>
         </View>
 
-        <Text style={styles.title}>Notes (0)</Text>
+        <Text style={styles.title}>Notes ({notes.length})</Text>
 
-        <Image source={require('../assets/empty.png')} style={styles.image} />
-        <Text>
-          Commencez par créer votre premier projet pour ajouter votre première
-          note ensuite
-        </Text>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => props.navigation.navigate('TabProjects')}
-        >
-          <LinearGradient colors={['#a996f2', '#8f79fc']} style={styles.addBtn}>
-            <Text style={styles.addBtnText}>Voir mes projets</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        {!notes[0] ? (
+          <>
+            <Image
+              source={require('../assets/empty.png')}
+              style={styles.image}
+            />
+            <Text>
+              Commencez par créer votre premier projet pour ajouter votre
+              première note ensuite
+            </Text>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => props.navigation.navigate('TabProjects')}
+            >
+              <LinearGradient
+                colors={['#a996f2', '#8f79fc']}
+                style={styles.addBtn}
+              >
+                <Text style={styles.addBtnText}>Voir mes projets</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <FlatList
+            data={notes}
+            renderItem={({ item }) => <Note item={item} />}
+          />
+        )}
       </SafeAreaView>
     </View>
   );
